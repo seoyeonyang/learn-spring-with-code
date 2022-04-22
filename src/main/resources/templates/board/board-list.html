@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<style>
+	table, tr, th, td{
+		border : 1px solid black;
+		border-collapse: collapse;
+	}
+	
+	.container{
+		min-width: 800px;
+		max-width: 1600px;
+		margin-left: 100px;
+		height: 100vh;
+	}
+	
+	.option-group{
+		text-align:right;
+	}
+	
+	.table-container{
+		width: 80%;
+		margin: 50px auto;
+	}
+	
+	.border-table{
+		width: 100%;
+	}	
+</style>
+
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div class="container">
+	<h1>게시글 보기</h1>
+	
+	<th:block th:if="${session.loginId != null}">
+	
+		<div class="option-group">
+			<button onclick="location.href='/boards/write'">게시글 쓰기</button>
+		</div>	
+	</th:block>
+	
+	<div class="table=container">
+		<table class="board-table">
+			<colgroup>
+				<col width="5%" />
+				<col width="60%" />
+				<col width="10%" />
+				<col width="10%" />
+				<col width="20%"/>
+				</table>
+			<thead>
+				<tr>
+					<th>순번</th>
+					<th>게시글 제목</th>
+					<th>조회수</th>
+					<th>작성자</th>
+					<th>생성일</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>	
+</div>
+
+</body>
+</html>

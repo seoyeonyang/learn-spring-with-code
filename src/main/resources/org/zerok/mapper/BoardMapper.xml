@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.zerok.mapper.BoardMapper">
+
+	<insert id="saveBoard" parameterType="boardVO">
+		INSERT INTO bp1.board(title, contents, create_account_id, modify_account_id)
+		VALUES (#{title}, #{contents}, #{createAccountId}, #{modifyAccountId})
+	</insert>
+
+
+
+</mapper>
