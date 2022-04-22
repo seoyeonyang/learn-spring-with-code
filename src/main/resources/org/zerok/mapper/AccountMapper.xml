@@ -7,9 +7,15 @@
 
 	<insert id="join" parameterType="AccountVO">
 	
-		INSERT INTO bp1.account(id, password, name)
-		VALUES(#{id}, #{password}, #{name})
+		INSERT INTO bp1.account(id, password, name, create_account_id, modify_account_id)
+		VALUES(#{id}, #{password}, #{name}, #{id}, #{id})
 		
 	</insert>
+	
+	<select id="findAccountInfo" parameterType="LoginForm" resultType="map">
+	
+		SELECT id, password FROM bp1.account WHERE id = #{id}
+		
+	</select>
 
 </mapper>

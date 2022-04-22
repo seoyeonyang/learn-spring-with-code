@@ -5,10 +5,20 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>INDEX PAGE</h1>
+	
+	<th:block th:if="${session.loginId != null}">
+		<h1>INDEX PAGE - [[${session.loginId}]]님 로그인</h1>
+	</th:block>
+	
+	<th:block th:if="${session.loginId == null}">
+		<h1>INDEX PAGE</h1>
+	</th:block>
 	
 	<a href="/join">회원가입 페이지</a>
 	
+	<br>
+	
+	<a href="/login">로그인 페이지</a>	
 	
 
 </body>
