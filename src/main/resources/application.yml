@@ -10,7 +10,7 @@ spring:
     mode: HTML
     cache: false
     
-    
+password-crypt-key : myFirstPasswordEncoding
     
 mybatis:  type-aliases-package: org.zerok.*
   configuration:    map-underscore-to-camel-case: true
