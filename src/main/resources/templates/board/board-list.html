@@ -31,14 +31,16 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
 </head>
 <body>
 
 <div class="container">
-	<h1>게시글 보기</h1>
+	<h1>게시글 보기</h1>	
 	
-	<th:block th:if="${session.loginId != null}">
-	
+	<th:block th:if="${session.loginId != null}">	
 		<div class="option-group">
 			<button onclick="location.href='/boards/write'">게시글 쓰기</button>
 		</div>	
@@ -52,7 +54,6 @@
 				<col width="10%" />
 				<col width="10%" />
 				<col width="20%"/>
-				</table>
 			<thead>
 				<tr>
 					<th>순번</th>
@@ -68,4 +69,61 @@
 </div>
 
 </body>
+
+<script>
+
+	window.onload = function(){
+		
+		renderingBoards();
+		
+	}
+	
+	function renderingBoards(){
+		
+		var url = "/boards/list";
+		
+		$.ajax({
+			url: url,
+			method: "GET",
+			timeout: 5000,
+			contentType: "application/json",
+			success: function(data, a, b){
+				
+				console.log(a);
+				console.log(b);
+				
+				_cb_renderingBoard(data);
+			},
+			error: function(a, b){
+				console.log(a);
+				console.log(b);
+				alert("에러");
+			}
+		});
+	}
+	
+	function _cb_renderingBoard(data){
+		
+		var tbody = document.querySelector(".board-table tbody");
+		
+		tbody.innerHTML = "";
+		
+		var html = "";
+		
+		for(var i = 0; i < data.length ; i++){
+			html += "<tr>";
+			html += "<td>" + data[i].idx + "</td>";
+			
+			html += "<td><a href='/boards/" + data[i].idx + "/detail'>" + data[i].title + "</a></td>";
+			
+			html += "<td>" + data[i].title + "</td>";
+			html += "<td>" + data[i].views + "</td>";
+			html += "<td>" + data[i].createAccountId + "</td>";
+			html += "<td>" + data[i].createdAt + "</td>";
+		}
+		
+		tbody.innerHTML = html;
+		
+	}
+</script>
 </html>

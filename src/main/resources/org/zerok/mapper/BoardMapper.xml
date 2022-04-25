@@ -9,7 +9,28 @@
 		INSERT INTO bp1.board(title, contents, create_account_id, modify_account_id)
 		VALUES (#{title}, #{contents}, #{createAccountId}, #{modifyAccountId})
 	</insert>
-
-
+	
+	<select id="getBoardList" resultType="BoardListDto">
+	
+		SELECT idx, title, views, created_at AS "createdAt", create_account_id AS "createAccountId"
+		FROM bp1.board
+		
+	</select>
+	
+	<update id="increaseViews" parameterType="int">
+		UPDATE bp1.board
+		SET
+			views = views + 1
+		WHERE
+			idx = #{boardIdx}
+	</update>
+	
+	<select id="getBoardDetail" parameterType="int" resultType="boardDetailDto">
+		
+		SELECT idx, title, contents, views, created_at AS "createdAt", create_account_id AS "createAccountId"
+		FROM bp1.board
+		WHERE idx = #{boardIdx}
+	
+	</select>
 
 </mapper>
