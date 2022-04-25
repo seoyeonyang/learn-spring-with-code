@@ -85,13 +85,30 @@ public class BoardController {
 	}
 	
 	@PostMapping("/boards/update")
-	public String boardUpdate(@ModelAttribute BoardDetailDto boardDetailDto) {
+	public String boardUpdate(@ModelAttribute BoardDetailDto boardDetailDto, HttpServletRequest request) {
 		//System.out.println(boardDetailDto);
+		
+		if(!authorized(boardDetailDto.getIdx(), request)) {
+			return "redirect:/";
+		}
 		
 		BoardService.boardUpdate(boardDetailDto);
 		
 		return "redirect:/boards";	
 		
+	}
+
+	private boolean authorized(int boardIdx, HttpServletRequest request) {
+		
+		BoardDetailDto boardDetail = BoardService.getBoardDetail(boardIdx);
+		String createAccountId  = boardDetail.getCreateAccountId();
+		
+		Object loginId = request.getSession().getAttribute("loginId");
+		
+		if(loginId == null || !createAccountId.equals(loginId.toString())) {
+			return false;
+		}
+		return false;
 	}
 
 }
