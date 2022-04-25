@@ -27,6 +27,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+
 </head>
 <body>
 	<div class="container">
@@ -59,6 +64,7 @@
 			<th:block th:if="${session.loginId != null && session.loginId == boardDetail.createAccountId}">
 			<div class="btn-wrapper">
 				<button type="button" onclick="editPage()">수정</button>
+				<button type="button" onclick="deleteBoard()">게시글 삭제</button>
 			</div>
 			</th:block>
 			
@@ -78,6 +84,32 @@
 		location.href = url;
 	}
 	
+	function deleteBoard(){
+		
+		console.log(1);
+		
+		if(!confirm("게시글을 삭제하시겠습니까?")){
+			return false;
+		}
+		console.log(2);
+		
+		var url = "/boards/" + boardIdx + "/delete";
+		console.log(url);
+		console.log(3);
+		$.ajax({
+			url: url,
+			method: "DELETE",
+			timeout: 5000,
+			success: function(){
+				alert("삭제되었습니다.");
+				location.href = "/boards";
+				},
+				error: function(a, b){
+					console.log(a);
+				}
+			});
+			
+	}
 </script>
 
 </html>

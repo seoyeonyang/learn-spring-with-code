@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -97,6 +98,20 @@ public class BoardController {
 		return "redirect:/boards";	
 		
 	}
+	
+	@DeleteMapping("/boards/{boardIdx}/delete")
+	public ResponseEntity<String> boardDelete(@PathVariable int boardIdx, HttpServletRequest request){
+		
+		if(!authorized(boardIdx, request)) { // false
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 접근방식입니다.");
+		}
+		
+		// true
+		BoardService.boardDelete(boardIdx);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(boardIdx + "번 게시글이 삭제되었습니다.");		
+		
+	}
 
 	private boolean authorized(int boardIdx, HttpServletRequest request) {
 		
@@ -108,7 +123,7 @@ public class BoardController {
 		if(loginId == null || !createAccountId.equals(loginId.toString())) {
 			return false;
 		}
-		return false;
+		return true;
 	}
 
 }

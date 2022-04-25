@@ -41,5 +41,11 @@
 			modify_at = now()
 		WHERE idx = #{idx}
 	</update>
+	
+	<delete id="boardDelete" parameterType="int">
+	
+		DELETE FROM bp1.board
+		WHERE idx = #{boardIdx}	
+	</delete>
 
 </mapper>
