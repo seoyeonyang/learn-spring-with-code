@@ -31,5 +31,9 @@ public class BoardService {
 		return boardMapper.getBoardDetail(boardIdx);
 	}
 	
+	public void boardUpdqte(BoardDetailDto boardDetailDto) {
+		boardMapper.boardUpdate(boardDetailDto);
+	}
+
 
 }

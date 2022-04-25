@@ -30,13 +30,14 @@
 </head>
 <body>
 	<div class="container">
-		<h1>게시글 상세 페이지</h1>
+		<h1>게시글 수정 페이지</h1>
 		
-		<form method="post" action="/boards" th:object="${boardDetail}">
+		<form method="post" action="/boards/update" th:object="${boardDetail}">
 		
 			<div class="write-info-wrapper">
 				<label>작성자</label>
 				<span th:text="*{createAccountId}">작성자 아이디</span>
+				<input type="hidden" name="createAccountId" id="createAccountId" th:field="*{createAccountId}">
 				<label>작성 날짜</label>
 				<span th:text="*{createdAt}">작성일자</span>	
 			</div>
@@ -46,19 +47,19 @@
 				<h4>
 					<label for="title">게시글 제목</label>					
 				</h4>
-				<input type="hidden" name="idx" id="idx" readonly th:field="*{idx}">
-				<input type="text" name="title" id="title" readonly th:field="*{title}">			
+				<input type="hidden" name="idx" id="idx" th:field="*{idx}">
+				<input type="text" name="title" id="title" required th:field="*{title}">			
 			</div>
 			<div class="contents-wrapper">
 				<h4>
 					<label for="contents">게시글 내용</label>
 				</h4>
-				<textarea name="contents" id="contents" cols="30" rows="10" readonly th:field="*{contents}"></textarea>
+				<textarea name="contents" id="contents" cols="30" rows="10" required th:field="*{contents}"></textarea>
 			</div>
 			
 			<th:block th:if="${session.loginId != null && session.loginId == boardDetail.createAccountId}">
 			<div class="btn-wrapper">
-				<button type="button" onclick="editPage()">수정</button>
+				<button type="submit">업데이트</button>
 			</div>
 			</th:block>
 			
@@ -67,17 +68,16 @@
 </body>
 
 <script th:inline="javascript">
-	
+
 	var boardDetail = [[${boardDetail}]];
 	var boardIdx = boardDetail == null ? null : boardDetail.idx;
 	
 	//alert(boardIdx);
 	
-	function editPage() {
+	function editPage(){
 		var url = "/boards/" + boardIdx + "/edit";
 		location.href = url;
 	}
-	
-</script>
 
+</script>
 </html>
