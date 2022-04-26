@@ -1,6 +1,7 @@
 package org.zerok.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.zerok.dto.BoardDetailDto;
@@ -12,9 +13,7 @@ import org.zerok.vo.BoardVO;
 public interface BoardMapper {
 
 	void saveBoard(BoardVO boardVo);
-
-	List<BoardListDto> getBoardList();
-
+	
 	void increaseViews(int boardIdx);
 
 	BoardDetailDto getBoardDetail(int boardIdx);
@@ -24,5 +23,7 @@ public interface BoardMapper {
 	void boardDelete(int boardIdx);
 
 	List<CommentsDto> getComments(int boardIdx);
+
+	List<BoardListDto> getBoardList(Map<String, String> parameter);
 
 }

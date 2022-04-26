@@ -42,26 +42,35 @@ table, tr, th, td {
 	<div class="container">
 		<h1>게시글 보기</h1>
 
-		<th:block th:if="${session.loginId != null}">
-			<div class="option-group">
+		<div class="option-group">
+			<select id="order">
+				<option value="created_at">최신순</option>
+				<option value="avg">평점순</option>
+				<option value="count">댓글수</option>
+				<option value="views">조회수</option>
+			</select>
+			<th:block th:if="${session.loginId != null}">
 				<button onclick="location.href='/boards/write'">게시글 쓰기</button>
-			</div>
+		</div>
 		</th:block>
 
 		<div class="table=container">
 			<table class="board-table">
 				<colgroup>
 					<col width="5%" />
-					<col width="60%" />
+					<col width="40%" />
+					<col width="10%" />
+					<col width="10%" />
 					<col width="10%" />
 					<col width="10%" />
 					<col width="20%" />
 				<thead>
 					<tr>
 						<th>순번</th>
-						<th>게시글</th>
-						<th>제목</th>
+						<th>게시글 제목</th>
 						<th>조회수</th>
+						<th>평점</th>
+						<th>댓글수</th>
 						<th>작성자</th>
 						<th>생성일</th>
 					</tr>
@@ -77,12 +86,31 @@ table, tr, th, td {
 	window.onload = function() {
 
 		renderingBoards();
+		
+		addEventOnSelectbox();
 
+	}
+	
+	function addEventOnSelectbox() {
+		
+		var orderSelectBox = document.querySelector("#order");
+		
+		orderSelectBox.addEventListener("change", function(e){
+			
+			//console.log(e.target.value);
+			var order = e.target.value;
+			
+			renderingBoards(order);
+		});
 	}
 
 	function renderingBoards() {
 
 		var url = "/boards/list";
+		
+		if(arguments[0] != null){
+			url += "?order=" + arguments[0];
+		} 
 
 		$.ajax({
 			url : url,
@@ -119,8 +147,12 @@ table, tr, th, td {
 			html += "<td><a href='/boards/" + data[i].idx + "/detail'>"
 					+ data[i].title + "</a></td>";
 
-			html += "<td>" + data[i].title + "</td>";
+			//html += "<td>" + data[i].title + "</td>";
 			html += "<td>" + data[i].views + "</td>";
+
+			html += "<td>" + data[i].avg + "</td>";
+			html += "<td>" + data[i].count + "</td>";
+
 			html += "<td>" + data[i].createAccountId + "</td>";
 			html += "<td>" + data[i].createdAt + "</td>";
 		}

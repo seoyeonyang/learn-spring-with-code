@@ -1,6 +1,8 @@
 package org.zerok.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.zerok.dto.BoardDetailDto;
 import org.zerok.dto.BoardListDto;
@@ -58,9 +62,12 @@ public class BoardController {
 
 	@GetMapping("/boards/list")
 	@ResponseBody
-	public ResponseEntity<List<BoardListDto>> getBoardList() {
-
-		List<BoardListDto> boardList = BoardService.getBoardList();
+	public ResponseEntity<List<BoardListDto>> getBoardList(@RequestParam(value = "order", required = false, defaultValue = "created_at") String order) {
+		
+		Map<String, String> parameter = new HashMap<String, String>();
+		parameter.put("order", order);
+		
+		List<BoardListDto> boardList = BoardService.getBoardList(parameter);
 
 		return ResponseEntity.status(HttpStatus.OK).body(boardList);
 	}

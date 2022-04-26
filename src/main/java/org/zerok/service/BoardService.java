@@ -1,6 +1,7 @@
 package org.zerok.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,8 @@ public class BoardService {
 		boardMapper.saveBoard(boardVo);
 	}
 
-	public List<BoardListDto> getBoardList() {
-		return boardMapper.getBoardList();
+	public List<BoardListDto> getBoardList(Map<String, String> parameter) {
+		return boardMapper.getBoardList(parameter);
 	}
 
 	public void increaseViews(int boardIdx) {

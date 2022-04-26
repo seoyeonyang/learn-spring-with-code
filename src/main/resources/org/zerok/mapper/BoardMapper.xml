@@ -11,11 +11,26 @@
 		VALUES (#{title}, #{contents}, #{createAccountId}, #{modifyAccountId})
 	</insert>
 
-	<select id="getBoardList" resultType="BoardListDto">
+	<select id="getBoardList" resultType="BoardListDto"
+		parameterType="map">
 
-		SELECT idx, title, views, created_at AS "createdAt", create_account_id AS
-		"createAccountId"
-		FROM bp1.board
+		SELECT b.idx, b.title, b.views,
+		COALESCE(c.avg, 0) AS avg,
+		COALESCE(c.count, 0) AS count,
+		b.create_account_id, b.created_at
+		FROM bp1.board b
+
+		LEFT JOIN (
+		SELECT board_idx, AVG(grade), COUNT(board_idx)
+		FROM bp1.comments
+		GROUP BY board_idx
+		) c
+
+		ON b.idx = c.board_idx
+		<!-- ORDER BY avg DESC; -->
+
+		ORDER BY ${order} DESC;
+
 
 	</select>
 
@@ -30,10 +45,12 @@
 	<select id="getBoardDetail" parameterType="int"
 		resultType="boardDetailDto">
 
-		SELECT idx, title, contents, views, created_at AS "createdAt",
+		SELECT idx, title, contents, views, created_at AS
+		"createdAt",
 		create_account_id AS "createAccountId"
 		FROM bp1.board
-		WHERE idx =
+		WHERE
+		idx =
 		#{boardIdx}
 
 	</select>
@@ -41,7 +58,8 @@
 	<update id="boardUpdate" parameterType="BoardDetailDto">
 		UPDATE bp1.board
 		SET
-		title = #{title},
+		title
+		= #{title},
 		contents = #{contents},
 		modify_at = now()
 		WHERE idx = #{idx}
@@ -52,12 +70,15 @@
 		DELETE FROM bp1.board
 		WHERE idx = #{boardIdx}
 	</delete>
-	
-	<select id="getComments" parameterType="int" resultType="commentsDto">
-		SELECT idx, grade, comments, create_account_id AS "createAccountId"
+
+	<select id="getComments" parameterType="int"
+		resultType="commentsDto">
+		SELECT idx, grade, comments, create_account_id AS
+		"createAccountId"
 		FROM bp1.comments
 		WHERE board_idx = #{boardIdx}
-		ORDER BY created_at DESC 	
+		ORDER
+		BY created_at DESC
 	</select>
 
 </mapper>

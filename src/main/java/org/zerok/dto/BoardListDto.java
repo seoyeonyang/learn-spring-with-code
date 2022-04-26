@@ -9,8 +9,10 @@ public class BoardListDto {
 	
 	private int idx;
 	private String title;
-	
+	private String contents;
 	private int views;
+	private double avg;
+	private int count;
 	private LocalDateTime createdAt;
 	private String createAccountId;
 	
