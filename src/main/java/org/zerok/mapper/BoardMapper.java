@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.zerok.dto.BoardDetailDto;
 import org.zerok.dto.BoardListDto;
+import org.zerok.dto.CommentsDto;
 import org.zerok.vo.BoardVO;
 
 @Mapper
@@ -21,4 +22,7 @@ public interface BoardMapper {
 	void boardUpdate(BoardDetailDto boardDetailDto);
 
 	void boardDelete(int boardIdx);
+
+	List<CommentsDto> getComments(int boardIdx);
+
 }

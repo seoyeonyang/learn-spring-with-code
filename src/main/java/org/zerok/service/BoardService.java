@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zerok.dto.BoardDetailDto;
 import org.zerok.dto.BoardListDto;
+import org.zerok.dto.CommentsDto;
 import org.zerok.mapper.BoardMapper;
 import org.zerok.vo.BoardVO;
 
@@ -37,6 +38,11 @@ public class BoardService {
 
 	public void boardDelete(int boardIdx) {
 		boardMapper.boardDelete(boardIdx);
+	}
+	
+
+	public List<CommentsDto> getComments(int boardIdx){
+		return boardMapper.getComments(boardIdx);
 	}
 
 }

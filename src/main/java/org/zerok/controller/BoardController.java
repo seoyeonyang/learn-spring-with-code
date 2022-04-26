@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.zerok.dto.BoardDetailDto;
 import org.zerok.dto.BoardListDto;
+import org.zerok.dto.CommentsDto;
 import org.zerok.mapper.BoardMapper;
 import org.zerok.vo.BoardVO;
 
@@ -112,6 +113,14 @@ public class BoardController {
 
 		return ResponseEntity.status(HttpStatus.OK).body(boardIdx + "번 게시글이 삭제되었습니다.");
 
+	}
+	
+	@GetMapping("/boards/{boardIdx}/comments")
+	public ResponseEntity<List<CommentsDto>> getComments(@PathVariable int boardIdx){
+		
+		List<CommentsDto> commentsList = BoardService.getComments(boardIdx);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(commentsList);
 	}
 
 	private boolean authorized(int boardIdx, HttpServletRequest request) {

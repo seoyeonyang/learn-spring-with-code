@@ -68,38 +68,38 @@
 			</th:block>
 
 		</form>
-		
+
 		<hr>
-		
+
 		<div class="comment-wrapper">
-			
+
 			<th:block th:if="${session.loginId != null}">
-			<div class="comment-write-box">
-				<h4>댓글작성</h4>
-				<div class="comment-grade" style="margin=bottom:10px;">
-					<label for="grade">평점</label>
-					<input type="number" name="grade" id="grade" required>
+				<div class="comment-write-box">
+					<h4>댓글작성</h4>
+					<div class="comment-grade" style="margin =bottom: 10px;">
+						<label for="grade">평점</label> <input type="number" name="grade"
+							id="grade" required>
+					</div>
+					<textarea name="comments" id="comments" required cols="30" rows="3"></textarea>
+					<div>
+						<button onclick="enrollComment()">댓글등록</button>
+					</div>
 				</div>
-				<textarea name="comments" id="comments" required cols="30" rows="3"></textarea>
-				<div>
-					<button onclick="enrollComment()">댓글등록</button>
-				</div>
-			</div>
 			</th:block>
-			
+
 			<div class="comment-list-box">
 				<ul>
-					<li style="margin-bottom:10px;">
-						<h5 style="margin-bottom:5px;">댓글 작성자</h5>
-						<div class="grade" style="margin-bottom:5px;">
+					<li style="margin-bottom: 10px;">
+						<h5 style="margin-bottom: 5px;">댓글 작성자</h5>
+						<div class="grade" style="margin-bottom: 5px;">
 							<span>평점</span>
 						</div>
 						<div class="comment">
 							<span>댓글1</span>
 						</div>
 					</li>
-				</ul>			
-			</div>		
+				</ul>
+			</div>
 		</div>
 
 
@@ -114,6 +114,47 @@
 	var loginId = [[${session.loginId}]];
 	
 	//alert(boardIdx);
+	
+	window.onload= function(){
+		getComments();
+	}
+	
+	function getComments(){
+		
+		var url = "/boards/" + boardIdx + "/comments";
+		
+		$.ajax({
+			url: url,
+			method: "GET",
+			timeout: 5000,
+			success: function(data){
+				_cb_getComments(data);
+			},
+			error: function(xhr, responseText){
+				alert(responseText);
+			}			
+		});
+	}
+	
+	function _cb_getComments(data){
+		console.log(data);
+		
+		var commentUl = document.querySelector(".comment-list-box ul");
+		
+		commentUl.innerHTML ="";
+		
+		var html = "";
+		
+		for(var i = 0; i < data.length; i++){
+			html += "<li style='margin-bottom:10px;'>";
+			html += "<h5 style='margin-bottom:5px;'>작성자 : " + data[i].createAccountId + "</h5>"
+			html += "<div class='grade' style='margin-bottom:5px;'><span> 평점 : " + data[i].grade + "점</span></div>"
+			html += "<div class='comment'><span>" + data[i].comments + "</span></div>";
+			html += "</li>";
+		}
+		
+		commentUl.innerHTML = html;
+	}
 	
 	function enrollComment(){
 		
@@ -163,6 +204,7 @@
 				alert(data);
 				document.querySelector("#grade").value = "";
 				document.querySelector("#comments").value = "";
+				getComments();
 			},
 			error: function(xhr, responseText){
 				alert(responseTest);
@@ -170,6 +212,7 @@
 		});
 		
 	}
+	
 	
 	function editPage() {
 		var url = "/boards/" + boardIdx + "/edit";

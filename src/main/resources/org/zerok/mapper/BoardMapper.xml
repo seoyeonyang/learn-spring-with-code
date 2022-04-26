@@ -52,5 +52,12 @@
 		DELETE FROM bp1.board
 		WHERE idx = #{boardIdx}
 	</delete>
+	
+	<select id="getComments" parameterType="int" resultType="commentsDto">
+		SELECT idx, grade, comments, create_account_id AS "createAccountId"
+		FROM bp1.comments
+		WHERE board_idx = #{boardIdx}
+		ORDER BY created_at DESC 	
+	</select>
 
 </mapper>
