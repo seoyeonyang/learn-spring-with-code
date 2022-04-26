@@ -8,22 +8,21 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
-public class AccessControlInterceptor implements HandlerInterceptor{
-	
+public class AccessControlInterceptor implements HandlerInterceptor {
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		
+
 		HttpSession session = request.getSession();
 		Object loginId = session.getAttribute("loginId");
-		
-		if(loginId == null) {
-			
+
+		if (loginId == null) {
+
 			response.sendRedirect("/");
 			return false;
-		}		
-		
-		
+		}
+
 		return HandlerInterceptor.super.preHandle(request, response, handler);
 	}
 

@@ -6,46 +6,51 @@
 <mapper namespace="org.zerok.mapper.BoardMapper">
 
 	<insert id="saveBoard" parameterType="boardVO">
-		INSERT INTO bp1.board(title, contents, create_account_id, modify_account_id)
+		INSERT INTO
+		bp1.board(title, contents, create_account_id, modify_account_id)
 		VALUES (#{title}, #{contents}, #{createAccountId}, #{modifyAccountId})
 	</insert>
-	
+
 	<select id="getBoardList" resultType="BoardListDto">
-	
-		SELECT idx, title, views, created_at AS "createdAt", create_account_id AS "createAccountId"
+
+		SELECT idx, title, views, created_at AS "createdAt", create_account_id AS
+		"createAccountId"
 		FROM bp1.board
-		
+
 	</select>
-	
+
 	<update id="increaseViews" parameterType="int">
 		UPDATE bp1.board
 		SET
-			views = views + 1
+		views = views + 1
 		WHERE
-			idx = #{boardIdx}
+		idx = #{boardIdx}
 	</update>
-	
-	<select id="getBoardDetail" parameterType="int" resultType="boardDetailDto">
-		
-		SELECT idx, title, contents, views, created_at AS "createdAt", create_account_id AS "createAccountId"
+
+	<select id="getBoardDetail" parameterType="int"
+		resultType="boardDetailDto">
+
+		SELECT idx, title, contents, views, created_at AS "createdAt",
+		create_account_id AS "createAccountId"
 		FROM bp1.board
-		WHERE idx = #{boardIdx}
-	
+		WHERE idx =
+		#{boardIdx}
+
 	</select>
-	
+
 	<update id="boardUpdate" parameterType="BoardDetailDto">
 		UPDATE bp1.board
 		SET
-			title = #{title},
-			contents = #{contents},
-			modify_at = now()
+		title = #{title},
+		contents = #{contents},
+		modify_at = now()
 		WHERE idx = #{idx}
 	</update>
-	
+
 	<delete id="boardDelete" parameterType="int">
-	
+
 		DELETE FROM bp1.board
-		WHERE idx = #{boardIdx}	
+		WHERE idx = #{boardIdx}
 	</delete>
 
 </mapper>

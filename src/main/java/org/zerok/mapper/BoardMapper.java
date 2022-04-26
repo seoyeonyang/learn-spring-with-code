@@ -15,7 +15,7 @@ public interface BoardMapper {
 	List<BoardListDto> getBoardList();
 
 	void increaseViews(int boardIdx);
-	
+
 	BoardDetailDto getBoardDetail(int boardIdx);
 
 	void boardUpdate(BoardDetailDto boardDetailDto);

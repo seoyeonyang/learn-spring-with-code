@@ -9,66 +9,100 @@
 	height: 100vh;
 }
 
-.title-wrapper{
+.title-wrapper {
 	margin-bottom: 30px;
 }
 
-.write-info-wrapper label{
+.write-info-wrapper label {
 	font-weight: bolder;
 	margin-right: 5px;
 }
 
-.wirte-info-wrapper span{
+.wirte-info-wrapper span {
 	margin-right: 20px;
 }
-
 </style>
 
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<script
-  src="https://code.jquery.com/jquery-3.6.0.min.js"
-  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+	crossorigin="anonymous"></script>
 
 </head>
 <body>
 	<div class="container">
 		<h1>게시글 상세 페이지</h1>
-		
+
 		<form method="post" action="/boards" th:object="${boardDetail}">
-		
+
 			<div class="write-info-wrapper">
-				<label>작성자</label>
-				<span th:text="*{createAccountId}">작성자 아이디</span>
-				<label>작성 날짜</label>
-				<span th:text="*{createdAt}">작성일자</span>	
+				<label>작성자</label> <span th:text="*{createAccountId}">작성자 아이디</span>
+				<label>작성 날짜</label> <span th:text="*{createdAt}">작성일자</span>
 			</div>
-			
-			
+
+
 			<div class="title-wrapper">
 				<h4>
-					<label for="title">게시글 제목</label>					
+					<label for="title">게시글 제목</label>
 				</h4>
 				<input type="hidden" name="idx" id="idx" readonly th:field="*{idx}">
-				<input type="text" name="title" id="title" readonly th:field="*{title}">			
+				<input type="text" name="title" id="title" readonly
+					th:field="*{title}">
 			</div>
 			<div class="contents-wrapper">
 				<h4>
 					<label for="contents">게시글 내용</label>
 				</h4>
-				<textarea name="contents" id="contents" cols="30" rows="10" readonly th:field="*{contents}"></textarea>
+				<textarea name="contents" id="contents" cols="30" rows="10" readonly
+					th:field="*{contents}"></textarea>
 			</div>
+
+			<th:block
+				th:if="${session.loginId != null && session.loginId == boardDetail.createAccountId}">
+				<div class="btn-wrapper">
+					<button type="button" onclick="editPage()">수정</button>
+					<button type="button" onclick="deleteBoard()">게시글 삭제</button>
+				</div>
+			</th:block>
+
+		</form>
+		
+		<hr>
+		
+		<div class="comment-wrapper">
 			
-			<th:block th:if="${session.loginId != null && session.loginId == boardDetail.createAccountId}">
-			<div class="btn-wrapper">
-				<button type="button" onclick="editPage()">수정</button>
-				<button type="button" onclick="deleteBoard()">게시글 삭제</button>
+			<th:block th:if="${session.loginId != null}">
+			<div class="comment-write-box">
+				<h4>댓글작성</h4>
+				<div class="comment-grade" style="margin=bottom:10px;">
+					<label for="grade">평점</label>
+					<input type="number" name="grade" id="grade" required>
+				</div>
+				<textarea name="comments" id="comments" required cols="30" rows="3"></textarea>
+				<div>
+					<button onclick="enrollComment()">댓글등록</button>
+				</div>
 			</div>
 			</th:block>
 			
-		</form>	
+			<div class="comment-list-box">
+				<ul>
+					<li style="margin-bottom:10px;">
+						<h5 style="margin-bottom:5px;">댓글 작성자</h5>
+						<div class="grade" style="margin-bottom:5px;">
+							<span>평점</span>
+						</div>
+						<div class="comment">
+							<span>댓글1</span>
+						</div>
+					</li>
+				</ul>			
+			</div>		
+		</div>
+
+
 	</div>
 </body>
 
@@ -77,7 +111,65 @@
 	var boardDetail = [[${boardDetail}]];
 	var boardIdx = boardDetail == null ? null : boardDetail.idx;
 	
+	var loginId = [[${session.loginId}]];
+	
 	//alert(boardIdx);
+	
+	function enrollComment(){
+		
+		var grade = document.querySelector("#grade").value;
+		var comments = document.querySelector("#comments").value;
+		
+		//console.log(loginId);
+		//console.log(grade);
+		//console.log(comments);
+		
+		if(loginId == null){
+			alert("잘못된 접근방식입니다.");
+			return;
+		}
+		
+		if(grade == null || grade == ''){
+			alert("평점을 입력해주세요");
+			return;
+		}
+		
+		if(comments == null || comments== ''){
+			alert("댓글을 입력해주세요");
+			return;
+		}
+		
+		var requestBody = new Object();
+		requestBody.boardIdx = boardIdx;
+		requestBody.comments = comments;
+		requestBody.grade = grade;
+		requestBody.createAccountId = loginId;
+		requestBody.modifyAccountId = loginId;
+		
+		console.log(requestBody);
+		
+		var strRequestBody = JSON.stringify(requestBody);
+		console.log(strRequestBody);
+		
+		var url = "/comments";
+		
+		$.ajax({
+			url: url,
+			method: "POST",
+			contentType: "application/json",
+			data: strRequestBody,
+			timeout: 5000,
+			success: function(data){
+				alert(data);
+				document.querySelector("#grade").value = "";
+				document.querySelector("#comments").value = "";
+			},
+			error: function(xhr, responseText){
+				alert(responseTest);
+			}			
+		});
+		
+	}
 	
 	function editPage() {
 		var url = "/boards/" + boardIdx + "/edit";
